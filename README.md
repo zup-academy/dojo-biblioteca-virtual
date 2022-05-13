@@ -22,7 +22,7 @@ feat/projeto-bcsr01-g1
 ou  
 
 ``` 
-feat/projeto-bcsr01-g1
+feat/projeto-bcsr01-g2
 ```
 
 Após o commit, será iniciado a rodada de analise, onde o mentor escolherá um dos grupos para discutir a solução implementada. A rodada de analise terá a duração de `5 minutos`.
