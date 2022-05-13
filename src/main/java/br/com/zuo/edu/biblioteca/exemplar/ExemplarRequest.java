@@ -1,12 +1,11 @@
 package br.com.zuo.edu.biblioteca.exemplar;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+
+import br.com.zuo.edu.biblioteca.livro.Livro;
 
 public class ExemplarRequest {
 
-    @Enumerated(EnumType.STRING)
     @NotNull
     private TipoCirculacao tipoCirculacao;
 
@@ -14,7 +13,7 @@ public class ExemplarRequest {
         this.tipoCirculacao = tipoCirculacao;
     }
 
-    public ExemplarRequest(){
+    public ExemplarRequest() {
 
     }
 
@@ -22,7 +21,8 @@ public class ExemplarRequest {
         return tipoCirculacao;
     }
 
-    public Exemplar toModel(){
-        return
+    public Exemplar toModel(Livro livro) {
+        return new Exemplar(tipoCirculacao, livro);
     }
+
 }

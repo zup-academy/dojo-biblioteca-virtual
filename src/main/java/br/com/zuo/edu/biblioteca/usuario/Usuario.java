@@ -1,4 +1,6 @@
-package br.com.zuo.edu.biblioteca.exemplar;
+package br.com.zuo.edu.biblioteca.usuario;
+
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,37 +9,36 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.zuo.edu.biblioteca.livro.Livro;
-
 @Entity
-@Table(name = "exemplares")
-public class Exemplar {
+@Table(name = "usuarios")
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoCirculacao tipoCirculacao;
+    @Enumerated(EnumType.STRING)
+    private TipoUsuario tipoUsuario;
 
-    @ManyToOne
-    private Livro livro;
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private LocalDate dataNascimento;
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
      */
     @Deprecated
-    public Exemplar() {
+    public Usuario() {}
 
-    }
-
-    public Exemplar(TipoCirculacao tipoCirculacao, Livro livro) {
-        this.tipoCirculacao = tipoCirculacao;
-        this.livro = livro;
+    public Usuario(TipoUsuario tipoUsuario, String nome, LocalDate dataNascimento) {
+        this.tipoUsuario = tipoUsuario;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
     }
 
     public Long getId() {
