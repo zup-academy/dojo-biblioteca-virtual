@@ -2,6 +2,8 @@ package br.com.zuo.edu.biblioteca.livro;
 
 import br.com.zuo.edu.biblioteca.usuario.TipoUsuario;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,8 +44,14 @@ public class ExemplarLivro {
         boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
         boolean exemplarRestrito = tipoCirculacao.equals(TipoCirculacao.RESTRITO);
 
-        ReservaExemplar novaReserva = new ReservaExemplar(this, usuario);
+        if(usuarioPadrao && exemplarRestrito) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Livro restrito para esse usuário");
+        }
 
+        // quantidade de emprestimo dos usuários padrão com exemplares reservados
+
+        ReservaExemplar novaReserva = new ReservaExemplar(this, usuario);
+        this.reservado = true;
         this.reservas.add(novaReserva);
         usuario.adicionarReserva(novaReserva);
 
