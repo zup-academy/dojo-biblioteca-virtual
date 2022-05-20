@@ -40,10 +40,11 @@ public class ExemplarLivro {
 
     public void solicitarEmprestimo(Usuario usuario) {
         boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
-        boolean exemplarRestrtito = exemplar.getTipoCirculacao().equals(TipoCirculacao.RESTRITO);
+        boolean exemplarRestrito = tipoCirculacao.equals(TipoCirculacao.RESTRITO);
 
-        if(usuarioPadrao && exemplarRestrtito) {
-        }
+        ReservaExemplar novaReserva = new ReservaExemplar(this, usuario);
 
+        this.reservas.add(novaReserva);
+        usuario.adicionarReserva(novaReserva);
     }
 }

@@ -41,4 +41,8 @@ public class Usuario {
     public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
     }
+
+    public void adicionarReserva(ReservaExemplar novaReserva) {
+        reservas.add(novaReserva);
+    }
 }
