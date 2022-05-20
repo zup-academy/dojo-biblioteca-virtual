@@ -24,6 +24,8 @@ public class Emprestimo {
     @ManyToOne
     private Exemplar exemplar;
 
+    
+
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
      */
