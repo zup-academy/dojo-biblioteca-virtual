@@ -1,13 +1,19 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "emprestimos")
 public class Emprestimo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,5 +23,20 @@ public class Emprestimo {
 
     @ManyToOne
     private Exemplar exemplar;
+
+    /**
+     * @deprecated Construtor de uso exclusivo do Hibernate
+     */
+    @Deprecated
+    public Emprestimo() {}
+
+    public Emprestimo(Usuario usuario, Exemplar exemplar) {
+        this.usuario = usuario;
+        this.exemplar = exemplar;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
 }
