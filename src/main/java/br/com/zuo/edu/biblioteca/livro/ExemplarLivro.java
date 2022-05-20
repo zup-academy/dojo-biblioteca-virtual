@@ -38,7 +38,7 @@ public class ExemplarLivro {
         return tipoCirculacao;
     }
 
-    public void solicitarEmprestimo(Usuario usuario) {
+    public ReservaExemplar solicitarEmprestimo(Usuario usuario) {
         boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
         boolean exemplarRestrito = tipoCirculacao.equals(TipoCirculacao.RESTRITO);
 
@@ -46,5 +46,7 @@ public class ExemplarLivro {
 
         this.reservas.add(novaReserva);
         usuario.adicionarReserva(novaReserva);
+
+        return novaReserva;
     }
 }

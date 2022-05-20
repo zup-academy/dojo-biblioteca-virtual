@@ -25,4 +25,8 @@ public class ReservaExemplar {
     @Deprecated
     public ReservaExemplar() {
     }
+
+    public Long getId() {
+        return id;
+    }
 }
