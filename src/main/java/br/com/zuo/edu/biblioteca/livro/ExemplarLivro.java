@@ -1,5 +1,7 @@
 package br.com.zuo.edu.biblioteca.livro;
 
+import br.com.zuo.edu.biblioteca.usuario.Usuario;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class ExemplarLivro {
     private TipoCirculacao tipoCirculacao;
     @ManyToOne
     private Livro livro;
+    private Boolean reservado = true;
 
     @Deprecated
     public ExemplarLivro() {
@@ -23,5 +26,9 @@ public class ExemplarLivro {
 
     public Long getId() {
         return id;
+    }
+
+    public TipoCirculacao getTipoCirculacao() {
+        return tipoCirculacao;
     }
 }

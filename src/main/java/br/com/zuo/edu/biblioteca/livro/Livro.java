@@ -1,5 +1,8 @@
 package br.com.zuo.edu.biblioteca.livro;
 
+import br.com.zuo.edu.biblioteca.usuario.TipoUsuario;
+import br.com.zuo.edu.biblioteca.usuario.Usuario;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -34,5 +37,14 @@ public class Livro {
 
     public Long getId() {
         return id;
+    }
+
+    public void solicitarEmprestimo(Usuario usuario, ExemplarLivro exemplar) {
+        boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
+        boolean exemplarRestrtito = exemplar.getTipoCirculacao().equals(TipoCirculacao.RESTRITO);
+
+        if(usuarioPadrao && exemplarRestrtito) {
+        }
+
     }
 }

@@ -30,4 +30,8 @@ public class Usuario {
     public Long getId() {
         return id;
     }
+
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
 }
