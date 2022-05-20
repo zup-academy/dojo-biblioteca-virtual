@@ -24,8 +24,6 @@ public class Emprestimo {
     @ManyToOne
     private Exemplar exemplar;
 
-    
-
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
      */
@@ -35,6 +33,7 @@ public class Emprestimo {
     public Emprestimo(Usuario usuario, Exemplar exemplar) {
         this.usuario = usuario;
         this.exemplar = exemplar;
+        exemplar.setDisponivel(false);
     }
 
     public Long getId() {

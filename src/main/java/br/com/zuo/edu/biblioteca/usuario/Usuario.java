@@ -1,12 +1,20 @@
 package br.com.zuo.edu.biblioteca.usuario;
 
-import br.com.zuo.edu.biblioteca.emprestimo.Emprestimo;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import br.com.zuo.edu.biblioteca.emprestimo.Emprestimo;
 
 @Entity
 @Table(name = "usuarios")
@@ -27,7 +35,7 @@ public class Usuario {
     private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "usuario")
-    private List<Emprestimo> emprestimos  = new ArrayList<>();
+    private List<Emprestimo> emprestimos = new ArrayList<>();
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
@@ -45,7 +53,15 @@ public class Usuario {
         return id;
     }
 
-    public void adicionar(Emprestimo emprestimo){
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public List<Emprestimo> getEmprestimos() {
+        return emprestimos;
+    }
+
+    public void adicionar(Emprestimo emprestimo) {
         this.emprestimos.add(emprestimo);
     }
 
