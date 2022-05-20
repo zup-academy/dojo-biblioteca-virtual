@@ -10,6 +10,9 @@ import javax.persistence.Table;
 import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "emprestimos")
 public class Emprestimo {
@@ -23,6 +26,8 @@ public class Emprestimo {
 
     @ManyToOne
     private Exemplar exemplar;
+
+    private LocalDate dataDevolucao;
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate

@@ -1,11 +1,14 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import br.com.zuo.edu.biblioteca.exemplar.TipoCirculacao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +59,9 @@ public class EmprestimoController {
                                                )
                                            );
 
+        LocalDate dataDevolucao = emprestimoRequest.getDataDevolucao();
+
+
         Optional<Exemplar> optionalExemplar = null;
         TipoUsuario tipoUsuario = usuario.getTipoUsuario();
         String novoIsbn = isbn.replaceAll("[^0-9X]", "");
@@ -66,12 +72,16 @@ public class EmprestimoController {
                     HttpStatus.BAD_REQUEST, "Usuário ultrapassou o limite de empréstimos."
                 );
             }
+            Long duracao = ChronoUnit.DAYS.between(LocalDate.now(),dataDevolucao);
+            if (dataDevolucao != null && duracao <= 60){
 
-            optionalExemplar = exemplarRepository.findFirstDisponivelIsTrueByTipoCirculacaoEqualsLIVREAndLivroIsbn(
-                novoIsbn
+            }
+
+            optionalExemplar = exemplarRepository.findFirstByDisponivelIsTrueAndTipoCirculacaoAndLivroIsbn(
+                    TipoCirculacao.LIVRE, novoIsbn
             );
         } else {
-            optionalExemplar = exemplarRepository.findFirstDisponivelIsTrueByLivroIsbn(novoIsbn);
+            optionalExemplar = exemplarRepository.findFirstByDisponivelIsTrueAndLivroIsbn(novoIsbn);
         }
 
         Exemplar exemplar = optionalExemplar.orElseThrow(
