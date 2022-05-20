@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ExemplarLivroRepository extends JpaRepository<ExemplarLivro, Long> {
-    Optional<ExemplarLivro> findFirstByLivroAndReservadoIsTrue(Long idLivro);
+    Optional<ExemplarLivro> findFirstByLivroAndReservadoIsFalse(Long idLivro);
 }

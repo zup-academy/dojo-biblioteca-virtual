@@ -1,8 +1,11 @@
 package br.com.zuo.edu.biblioteca.livro;
 
+import br.com.zuo.edu.biblioteca.usuario.TipoUsuario;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ExemplarLivro {
@@ -13,7 +16,10 @@ public class ExemplarLivro {
     private TipoCirculacao tipoCirculacao;
     @ManyToOne
     private Livro livro;
-    private Boolean reservado = true;
+    private Boolean reservado = false;
+
+    @OneToMany(mappedBy = "exemplar", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<ReservaExemplar> reservas = new ArrayList<>();
 
     @Deprecated
     public ExemplarLivro() {
@@ -30,5 +36,14 @@ public class ExemplarLivro {
 
     public TipoCirculacao getTipoCirculacao() {
         return tipoCirculacao;
+    }
+
+    public void solicitarEmprestimo(Usuario usuario) {
+        boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
+        boolean exemplarRestrtito = exemplar.getTipoCirculacao().equals(TipoCirculacao.RESTRITO);
+
+        if(usuarioPadrao && exemplarRestrtito) {
+        }
+
     }
 }

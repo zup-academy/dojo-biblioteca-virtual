@@ -39,12 +39,4 @@ public class Livro {
         return id;
     }
 
-    public void solicitarEmprestimo(Usuario usuario, ExemplarLivro exemplar) {
-        boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
-        boolean exemplarRestrtito = exemplar.getTipoCirculacao().equals(TipoCirculacao.RESTRITO);
-
-        if(usuarioPadrao && exemplarRestrtito) {
-        }
-
-    }
 }
