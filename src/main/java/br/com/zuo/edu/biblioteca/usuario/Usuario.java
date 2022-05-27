@@ -1,6 +1,6 @@
 package br.com.zuo.edu.biblioteca.usuario;
 
-import br.com.zuo.edu.biblioteca.livro.ReservaExemplar;
+import br.com.zuo.edu.biblioteca.livro.Emprestimo;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
 
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<ReservaExemplar> reservas = new ArrayList<>();
+    private List<Emprestimo> reservas = new ArrayList<>();
 
     public Usuario(String nome, LocalDate dataNascimento, TipoUsuario tipoUsuario) {
         this.nome = nome;
@@ -42,7 +42,7 @@ public class Usuario {
         return tipoUsuario;
     }
 
-    public void adicionarReserva(ReservaExemplar novaReserva) {
+    public void adicionarReserva(Emprestimo novaReserva) {
         reservas.add(novaReserva);
     }
 }

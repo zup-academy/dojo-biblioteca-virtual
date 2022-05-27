@@ -3,9 +3,10 @@ package br.com.zuo.edu.biblioteca.livro;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-public class ReservaExemplar {
+public class Emprestimo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +18,22 @@ public class ReservaExemplar {
     @ManyToOne(optional = false)
     private Usuario usuario;
 
-    public ReservaExemplar(ExemplarLivro exemplar, Usuario usuario) {
+    @Column(nullable = false)
+    private LocalDate dataEntrega;
+
+    public Emprestimo(ExemplarLivro exemplar, Usuario usuario) {
         this.exemplar = exemplar;
         this.usuario = usuario;
     }
 
+    public Emprestimo(ExemplarLivro exemplar, Usuario usuario, LocalDate dataEntrega) {
+        this.exemplar = exemplar;
+        this.usuario = usuario;
+        this.dataEntrega = dataEntrega;
+    }
+
     @Deprecated
-    public ReservaExemplar() {
+    public Emprestimo() {
     }
 
     public Long getId() {

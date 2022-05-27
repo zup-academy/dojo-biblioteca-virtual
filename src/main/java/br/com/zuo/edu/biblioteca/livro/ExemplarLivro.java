@@ -21,7 +21,7 @@ public class ExemplarLivro {
     private Boolean reservado = false;
 
     @OneToMany(mappedBy = "exemplar", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<ReservaExemplar> reservas = new ArrayList<>();
+    private List<Emprestimo> reservas = new ArrayList<>();
 
     @Deprecated
     public ExemplarLivro() {
@@ -40,7 +40,7 @@ public class ExemplarLivro {
         return tipoCirculacao;
     }
 
-    public ReservaExemplar solicitarEmprestimo(Usuario usuario) {
+    public Emprestimo solicitarEmprestimo(Usuario usuario, Integer prazoEmDias) {
         boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
         boolean exemplarRestrito = tipoCirculacao.equals(TipoCirculacao.RESTRITO);
 
@@ -48,9 +48,15 @@ public class ExemplarLivro {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Livro restrito para esse usuário");
         }
 
+        if(usuarioPadrao && prazoEmDias == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Usuário não definiu o tempo de empréstimo");
+        }
+
+        // Data de entrega
+
         // quantidade de emprestimo dos usuários padrão com exemplares reservados
 
-        ReservaExemplar novaReserva = new ReservaExemplar(this, usuario);
+        Emprestimo novaReserva = new Emprestimo(this, usuario);
         this.reservado = true;
         this.reservas.add(novaReserva);
         usuario.adicionarReserva(novaReserva);
