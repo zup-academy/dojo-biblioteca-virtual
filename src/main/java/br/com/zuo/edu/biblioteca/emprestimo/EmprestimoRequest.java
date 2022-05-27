@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -15,27 +16,28 @@ public class EmprestimoRequest {
     @NotNull
     private Long usuarioId;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @Future
-    private LocalDate dataDevolucao;
+    @Positive
+    private Integer prazoEmDias;
+
+
 
     public EmprestimoRequest() {}
 
-    public EmprestimoRequest(Long usuarioId, LocalDate dataDevolucao) {
+    public EmprestimoRequest(Long usuarioId, Integer prazoEmDias) {
         this.usuarioId = usuarioId;
-        this.dataDevolucao = dataDevolucao;
+        this.prazoEmDias = prazoEmDias;
     }
 
-    public Emprestimo toModel(Exemplar exemplar, Usuario usuario) {
-        return new Emprestimo(usuario, exemplar);
+    public Emprestimo toModel(Exemplar exemplar, Usuario usuario, Integer prazoEmDias) {
+        return new Emprestimo(usuario, exemplar, prazoEmDias);
     }
 
     public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public LocalDate getDataDevolucao() {
-        return dataDevolucao;
+    public Integer getPrazoEmDias() {
+        return prazoEmDias;
     }
 
 }

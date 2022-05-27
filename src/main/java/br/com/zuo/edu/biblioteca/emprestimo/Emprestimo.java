@@ -27,7 +27,10 @@ public class Emprestimo {
     @ManyToOne
     private Exemplar exemplar;
 
-    private LocalDate dataDevolucao;
+    private LocalDate criadoEm = LocalDate.now();
+
+    private Integer prazoEmDias;
+
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
@@ -35,14 +38,19 @@ public class Emprestimo {
     @Deprecated
     public Emprestimo() {}
 
-    public Emprestimo(Usuario usuario, Exemplar exemplar) {
+    public Emprestimo(Usuario usuario, Exemplar exemplar, Integer prazoEmDias) {
         this.usuario = usuario;
         this.exemplar = exemplar;
+        this.prazoEmDias = prazoEmDias;
         exemplar.setDisponivel(false);
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setPrazoEmDias(Integer prazoEmDias) {
+        this.prazoEmDias = prazoEmDias;
     }
 
 }

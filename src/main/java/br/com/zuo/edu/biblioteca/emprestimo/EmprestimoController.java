@@ -59,7 +59,7 @@ public class EmprestimoController {
                                                )
                                            );
 
-        LocalDate dataDevolucao = emprestimoRequest.getDataDevolucao();
+        Integer prazoEmDias = emprestimoRequest.getPrazoEmDias();
         Optional<Exemplar> optionalExemplar = null;
         TipoUsuario tipoUsuario = usuario.getTipoUsuario();
         String novoIsbn = isbn.replaceAll("[^0-9X]", "");
@@ -71,17 +71,9 @@ public class EmprestimoController {
                 );
             }
 
-            if (dataDevolucao == null) {
+            if (prazoEmDias == null) {
                 throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "É necessário informar uma data de devolução."
-                );
-            }
-
-            Long duracao = ChronoUnit.DAYS.between(LocalDate.now(), dataDevolucao);
-            if (duracao > 60) {
-                throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "É necessário informar uma data de devolução com no máximo 60 dias a partir da data de empréstimo."
+                    HttpStatus.BAD_REQUEST, "É necessário informar um prazo de devolução."
                 );
             }
 
@@ -90,9 +82,16 @@ public class EmprestimoController {
             );
         } else {
             optionalExemplar = exemplarRepository.findFirstByDisponivelIsTrueAndLivroIsbn(novoIsbn);
-            if (dataDevolucao == null) {
-                dataDevolucao = LocalDate.now().plusDays(60L);
+            if (prazoEmDias == null) {
+                prazoEmDias = 60;
             }
+        }
+
+        if (prazoEmDias > 60) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "É necessário informar um prazo de devolução de no máximo 60 dias a partir da data de empréstimo."
+            );
         }
 
         Exemplar exemplar = optionalExemplar.orElseThrow(
@@ -101,7 +100,7 @@ public class EmprestimoController {
             )
         );
 
-        Emprestimo emprestimo = emprestimoRequest.toModel(exemplar, usuario);
+        Emprestimo emprestimo = emprestimoRequest.toModel(exemplar, usuario, prazoEmDias);
 
         emprestimoRepository.save(emprestimo);
 
