@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,16 +52,21 @@ public class ExemplarLivro {
         if(usuarioPadrao && prazoEmDias == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Usuário não definiu o tempo de empréstimo");
         }
-
         // Data de entrega
+        if (prazoEmDias == null) {
+            prazoEmDias = 60;
+        }
+
+        LocalDate prazo = LocalDate.now().plusDays(prazoEmDias);
+
 
         // quantidade de emprestimo dos usuários padrão com exemplares reservados
 
-        Emprestimo novaReserva = new Emprestimo(this, usuario);
+        Emprestimo emprestimo = new Emprestimo(this, usuario, prazo);
         this.reservado = true;
-        this.reservas.add(novaReserva);
-        usuario.adicionarReserva(novaReserva);
+        this.reservas.add(emprestimo);
+        usuario.adicionarReserva(emprestimo);
 
-        return novaReserva;
+        return emprestimo;
     }
 }

@@ -40,6 +40,7 @@ public class SolicitarEmprestimoController {
         Usuario usuario = usuarioRepository.findById(request.getIdUsuario())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário inexistente"));
 
+        //Integer quantidadeEmprestimoDoUsuario = usuarioRepository.countByAtivo True (u);
         Emprestimo reserva = exemplar.solicitarEmprestimo(usuario, request.getPrazoEmDias());
 
         exemplarLivroRepository.flush();

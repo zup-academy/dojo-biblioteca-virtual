@@ -1,5 +1,6 @@
 package br.com.zuo.edu.biblioteca.livro;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -8,6 +9,7 @@ public class SolicitarEmprestimoRequest {
     @NotNull
     private Long idUsuario;
 
+    @Max(60)
     @Positive
     private Integer prazoEmDias;
 
