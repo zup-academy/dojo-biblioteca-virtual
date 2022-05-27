@@ -8,7 +8,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import br.com.zuo.edu.biblioteca.exemplar.TipoCirculacao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
 import br.com.zuo.edu.biblioteca.exemplar.ExemplarRepository;
+import br.com.zuo.edu.biblioteca.exemplar.TipoCirculacao;
 import br.com.zuo.edu.biblioteca.livro.LivroController;
 import br.com.zuo.edu.biblioteca.livro.LivroRepository;
 import br.com.zuo.edu.biblioteca.usuario.TipoUsuario;
@@ -60,8 +60,6 @@ public class EmprestimoController {
                                            );
 
         LocalDate dataDevolucao = emprestimoRequest.getDataDevolucao();
-
-
         Optional<Exemplar> optionalExemplar = null;
         TipoUsuario tipoUsuario = usuario.getTipoUsuario();
         String novoIsbn = isbn.replaceAll("[^0-9X]", "");
@@ -72,16 +70,29 @@ public class EmprestimoController {
                     HttpStatus.BAD_REQUEST, "Usuário ultrapassou o limite de empréstimos."
                 );
             }
-            Long duracao = ChronoUnit.DAYS.between(LocalDate.now(),dataDevolucao);
-            if (dataDevolucao != null && duracao <= 60){
 
+            if (dataDevolucao == null) {
+                throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "É necessário informar uma data de devolução."
+                );
+            }
+
+            Long duracao = ChronoUnit.DAYS.between(LocalDate.now(), dataDevolucao);
+            if (duracao > 60) {
+                throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "É necessário informar uma data de devolução com no máximo 60 dias a partir da data de empréstimo."
+                );
             }
 
             optionalExemplar = exemplarRepository.findFirstByDisponivelIsTrueAndTipoCirculacaoAndLivroIsbn(
-                    TipoCirculacao.LIVRE, novoIsbn
+                TipoCirculacao.LIVRE, novoIsbn
             );
         } else {
             optionalExemplar = exemplarRepository.findFirstByDisponivelIsTrueAndLivroIsbn(novoIsbn);
+            if (dataDevolucao == null) {
+                dataDevolucao = LocalDate.now().plusDays(60L);
+            }
         }
 
         Exemplar exemplar = optionalExemplar.orElseThrow(

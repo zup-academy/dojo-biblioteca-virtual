@@ -1,12 +1,14 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
-import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
-import br.com.zuo.edu.biblioteca.usuario.Usuario;
+import java.time.LocalDate;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
+import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
+import br.com.zuo.edu.biblioteca.usuario.Usuario;
 
 public class EmprestimoRequest {
 
@@ -14,6 +16,7 @@ public class EmprestimoRequest {
     private Long usuarioId;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
+    @Future
     private LocalDate dataDevolucao;
 
     public EmprestimoRequest() {}
@@ -34,4 +37,5 @@ public class EmprestimoRequest {
     public LocalDate getDataDevolucao() {
         return dataDevolucao;
     }
+
 }
