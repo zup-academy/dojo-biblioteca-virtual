@@ -1,12 +1,8 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
-import java.time.LocalDate;
-
-import javax.validation.constraints.Future;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
@@ -17,9 +13,8 @@ public class EmprestimoRequest {
     private Long usuarioId;
 
     @Positive
+    @Max(60)
     private Integer prazoEmDias;
-
-
 
     public EmprestimoRequest() {}
 

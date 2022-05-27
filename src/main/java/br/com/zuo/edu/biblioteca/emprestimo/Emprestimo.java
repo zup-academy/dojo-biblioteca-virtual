@@ -1,5 +1,9 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,9 +13,6 @@ import javax.persistence.Table;
 
 import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "emprestimos")
@@ -27,10 +28,16 @@ public class Emprestimo {
     @ManyToOne
     private Exemplar exemplar;
 
-    private LocalDate criadoEm = LocalDate.now();
+    @Column(nullable = false)
+    private LocalDateTime criadoEm;
 
+    @Column(nullable = false)
     private Integer prazoEmDias;
 
+    @Column(nullable = false)
+    private boolean ativo;
+
+    // TODO: adicionar a data na qual que o livro foi devolvido.
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
@@ -42,6 +49,8 @@ public class Emprestimo {
         this.usuario = usuario;
         this.exemplar = exemplar;
         this.prazoEmDias = prazoEmDias;
+        this.ativo = true;
+        this.criadoEm = LocalDateTime.now();
         exemplar.setDisponivel(false);
     }
 
@@ -49,8 +58,12 @@ public class Emprestimo {
         return id;
     }
 
-    public void setPrazoEmDias(Integer prazoEmDias) {
-        this.prazoEmDias = prazoEmDias;
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public boolean isExpirado() {
+        return isAtivo() && criadoEm.toLocalDate().plusDays(prazoEmDias).isBefore(LocalDate.now());
     }
 
 }
