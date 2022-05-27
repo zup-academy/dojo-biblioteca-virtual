@@ -41,7 +41,7 @@ public class ExemplarLivro {
         return tipoCirculacao;
     }
 
-    public Emprestimo solicitarEmprestimo(Usuario usuario, Integer prazoEmDias) {
+    public Emprestimo solicitarEmprestimo(Usuario usuario, Integer prazoEmDias, Integer quantidadeEmprestimoDoUsuario) {
         boolean usuarioPadrao = usuario.getTipoUsuario().equals(TipoUsuario.PADRAO);
         boolean exemplarRestrito = tipoCirculacao.equals(TipoCirculacao.RESTRITO);
 
@@ -59,8 +59,10 @@ public class ExemplarLivro {
 
         LocalDate prazo = LocalDate.now().plusDays(prazoEmDias);
 
-
         // quantidade de emprestimo dos usuários padrão com exemplares reservados
+        if (usuarioPadrao && quantidadeEmprestimoDoUsuario > 5) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Usuário já possui número máximo de empréstimos");
+        }
 
         Emprestimo emprestimo = new Emprestimo(this, usuario, prazo);
         this.reservado = true;

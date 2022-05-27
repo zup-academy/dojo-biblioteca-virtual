@@ -22,7 +22,7 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
 
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Emprestimo> reservas = new ArrayList<>();
+    private List<Emprestimo> emprestimos = new ArrayList<>();
 
     public Usuario(String nome, LocalDate dataNascimento, TipoUsuario tipoUsuario) {
         this.nome = nome;
@@ -43,6 +43,6 @@ public class Usuario {
     }
 
     public void adicionarReserva(Emprestimo novaReserva) {
-        reservas.add(novaReserva);
+        emprestimos.add(novaReserva);
     }
 }

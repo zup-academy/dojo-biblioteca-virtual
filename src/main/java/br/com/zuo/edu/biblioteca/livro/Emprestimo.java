@@ -21,6 +21,9 @@ public class Emprestimo {
     @Column(nullable = false)
     private LocalDate dataEntrega;
 
+    @Column(nullable = false)
+    private boolean ativo = true;
+
     public Emprestimo(ExemplarLivro exemplar, Usuario usuario) {
         this.exemplar = exemplar;
         this.usuario = usuario;
