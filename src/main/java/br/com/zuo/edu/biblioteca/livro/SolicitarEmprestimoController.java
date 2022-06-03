@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 
 @RestController
 public class SolicitarEmprestimoController {
@@ -38,6 +39,12 @@ public class SolicitarEmprestimoController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário inexistente"));
 
         //checar se usuário tem emprestimo ativo e expirado
+        Boolean usuarioPossuiEmprestimoExpirado = usuarioRepository
+                .existsByIdAndEmprestimosAtivoIsTrueAndEmprestimosDataEntregaBefore(usuario.getId(), LocalDate.now());
+
+        if (usuarioPossuiEmprestimoExpirado) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário possui empréstimo expirado");
+        }
 
         ExemplarLivro exemplar = exemplarLivroRepository.findFirstByLivroIdAndReservadoIsFalse(livro.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exemplar do livro não encontrado"));
