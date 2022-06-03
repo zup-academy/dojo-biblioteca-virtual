@@ -42,7 +42,7 @@ public class Usuario {
         return tipoUsuario;
     }
 
-    public void adicionarReserva(Emprestimo novaReserva) {
+    public void adicionarEmprestimo(Emprestimo novaReserva) {
         emprestimos.add(novaReserva);
     }
 }

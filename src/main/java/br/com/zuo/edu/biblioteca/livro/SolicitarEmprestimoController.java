@@ -34,20 +34,22 @@ public class SolicitarEmprestimoController {
         Livro livro = livroRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
 
-        ExemplarLivro exemplar = exemplarLivroRepository.findFirstByLivroIdAndReservadoIsFalse(livro.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exemplar do livro não encontrado"));
-
         Usuario usuario = usuarioRepository.findById(request.getIdUsuario())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário inexistente"));
 
+        //checar se usuário tem emprestimo ativo e expirado
+
+        ExemplarLivro exemplar = exemplarLivroRepository.findFirstByLivroIdAndReservadoIsFalse(livro.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exemplar do livro não encontrado"));
+
         Integer quantidadeEmprestimoDoUsuario = usuarioRepository.countByIdAndEmprestimosAtivoIsTrue(usuario.getId());
 
-        Emprestimo reserva = exemplar.solicitarEmprestimo(usuario, request.getPrazoEmDias(), quantidadeEmprestimoDoUsuario);
+        Emprestimo emprestimo = exemplar.solicitarEmprestimo(usuario, request.getPrazoEmDias(), quantidadeEmprestimoDoUsuario);
 
         exemplarLivroRepository.flush();
 
         URI location = uriComponentsBuilder.path("/livros/{isbn}/emprestimos/{id}")
-                .buildAndExpand(isbn,reserva.getId()).toUri();
+                .buildAndExpand(isbn,emprestimo.getId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
