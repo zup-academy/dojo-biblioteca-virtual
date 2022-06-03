@@ -1,6 +1,5 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -37,6 +36,9 @@ public class Emprestimo {
     @Column(nullable = false)
     private boolean ativo;
 
+    @Column(nullable = false)
+    private LocalDateTime dataEntregaPrevista;
+
     // TODO: adicionar a data na qual que o livro foi devolvido.
 
     /**
@@ -51,6 +53,7 @@ public class Emprestimo {
         this.prazoEmDias = prazoEmDias;
         this.ativo = true;
         this.criadoEm = LocalDateTime.now();
+        this.dataEntregaPrevista = LocalDateTime.now().plusDays(prazoEmDias);
         exemplar.setDisponivel(false);
     }
 
@@ -60,10 +63,6 @@ public class Emprestimo {
 
     public boolean isAtivo() {
         return ativo;
-    }
-
-    public boolean passouDataDeEntrega() {
-        return criadoEm.toLocalDate().plusDays(prazoEmDias).isBefore(LocalDate.now());
     }
 
 }

@@ -14,14 +14,14 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping(LivroController.BASE_URI)
-public class LivroController {
+@RequestMapping(CadastrarLivroController.BASE_URI)
+public class CadastrarLivroController {
 
     public final static String BASE_URI = "/livros";
 
     private final LivroRepository livroRepository;
 
-    public LivroController(LivroRepository livroRepository) {
+    public CadastrarLivroController(LivroRepository livroRepository) {
         this.livroRepository = livroRepository;
     }
 

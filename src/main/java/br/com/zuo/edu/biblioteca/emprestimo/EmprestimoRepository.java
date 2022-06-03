@@ -1,13 +1,15 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.time.LocalDateTime;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
 
     Long countByAtivoIsTrueAndUsuarioId(Long usuarioId);
 
-    List<Emprestimo> findAllByAtivoIsTrueAndUsuarioId(Long usuarioId);
+    // Emprestimos Expirados
+    Long countByAtivoIsTrueAndDataEntregaPrevistaIsBeforeAndUsuarioId(LocalDateTime data,
+                                                                      Long usuarioId);
 
 }

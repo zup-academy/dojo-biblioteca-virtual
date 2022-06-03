@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.zuo.edu.biblioteca.livro.CadastrarLivroController;
 import br.com.zuo.edu.biblioteca.livro.Livro;
-import br.com.zuo.edu.biblioteca.livro.LivroController;
 import br.com.zuo.edu.biblioteca.livro.LivroRepository;
 
 @RestController
-@RequestMapping(LivroController.BASE_URI + "/{isbn}" + ExemplarController.BASE_URI)
+@RequestMapping(CadastrarLivroController.BASE_URI + "/{isbn}" + ExemplarController.BASE_URI)
 public class ExemplarController {
 
     public final static String BASE_URI = "/exemplares";
@@ -48,7 +48,7 @@ public class ExemplarController {
 
         Exemplar exemplar = exemplarRepository.save(exemplarRequest.toModel(livro));
 
-        URI location = ucb.path(LivroController.BASE_URI + "/{isbn}" + BASE_URI + "/{id}")
+        URI location = ucb.path(CadastrarLivroController.BASE_URI + "/{isbn}" + BASE_URI + "/{id}")
                           .buildAndExpand(novoIsbn, exemplar.getId())
                           .toUri();
 

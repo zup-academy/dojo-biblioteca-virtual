@@ -1,9 +1,8 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
 import java.net.URI;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -21,14 +20,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.zuo.edu.biblioteca.exemplar.Exemplar;
 import br.com.zuo.edu.biblioteca.exemplar.ExemplarRepository;
 import br.com.zuo.edu.biblioteca.exemplar.TipoCirculacao;
-import br.com.zuo.edu.biblioteca.livro.LivroController;
+import br.com.zuo.edu.biblioteca.livro.CadastrarLivroController;
 import br.com.zuo.edu.biblioteca.usuario.TipoUsuario;
 import br.com.zuo.edu.biblioteca.usuario.Usuario;
 import br.com.zuo.edu.biblioteca.usuario.UsuarioRepository;
 
 @RestController
-@RequestMapping(LivroController.BASE_URI + "/{isbn}" + EmprestimoController.BASE_URI)
-public class EmprestimoController {
+@RequestMapping(CadastrarLivroController.BASE_URI + "/{isbn}"
+        + RealizarEmprestimoController.BASE_URI)
+public class RealizarEmprestimoController {
 
     public final static String BASE_URI = "/emprestimos";
 
@@ -36,9 +36,9 @@ public class EmprestimoController {
     private final EmprestimoRepository emprestimoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public EmprestimoController(ExemplarRepository exemplarRepository,
-                                EmprestimoRepository emprestimoRepository,
-                                UsuarioRepository usuarioRepository) {
+    public RealizarEmprestimoController(ExemplarRepository exemplarRepository,
+                                        EmprestimoRepository emprestimoRepository,
+                                        UsuarioRepository usuarioRepository) {
         this.exemplarRepository = exemplarRepository;
         this.emprestimoRepository = emprestimoRepository;
         this.usuarioRepository = usuarioRepository;
@@ -46,7 +46,7 @@ public class EmprestimoController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody @Valid EmprestimoRequest emprestimoRequest,
+    public ResponseEntity<?> emprestar(@RequestBody @Valid EmprestimoRequest emprestimoRequest,
                                        @PathVariable String isbn, UriComponentsBuilder ucb) {
         Long usuarioId = emprestimoRequest.getUsuarioId();
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -61,24 +61,20 @@ public class EmprestimoController {
         TipoUsuario tipoUsuario = usuario.getTipoUsuario();
         String novoIsbn = isbn.replaceAll("[^0-9X]", "");
 
+        if (emprestimoRepository.countByAtivoIsTrueAndDataEntregaPrevistaIsBeforeAndUsuarioId(
+            LocalDateTime.now(), usuarioId
+        ) > 0) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Usuário possui um ou mais empréstimos expirados."
+            );
+        }
+
         if (tipoUsuario.equals(TipoUsuario.PADRAO)) {
-            List<Emprestimo> emprestimosAtivos = emprestimoRepository.findAllByAtivoIsTrueAndUsuarioId(usuarioId);
-            List<Emprestimo> emprestimosExpirados = emprestimosAtivos.stream()
-                    .filter(Emprestimo::passouDataDeEntrega).collect(Collectors.toList());
-
-            if (emprestimosExpirados.size() > 0) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Usuário possui um ou mais empréstimos expirados."
-                );
-            }
-
-            if (emprestimosAtivos.size() >= 5) {
+            if (emprestimoRepository.countByAtivoIsTrueAndUsuarioId(usuarioId) >= 5) {
                 throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Usuário ultrapassou o limite de empréstimos."
                 );
             }
-
-
 
             if (prazoEmDias == null) {
                 throw new ResponseStatusException(
@@ -107,7 +103,7 @@ public class EmprestimoController {
 
         emprestimoRepository.save(emprestimo);
 
-        URI location = ucb.path(LivroController.BASE_URI + "/{isbn}" + BASE_URI + "/{id}")
+        URI location = ucb.path(CadastrarLivroController.BASE_URI + "/{isbn}" + BASE_URI + "/{id}")
                           .buildAndExpand(novoIsbn, emprestimo.getId())
                           .toUri();
 
