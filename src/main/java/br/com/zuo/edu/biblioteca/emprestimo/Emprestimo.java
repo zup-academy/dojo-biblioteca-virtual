@@ -39,7 +39,9 @@ public class Emprestimo {
     @Column(nullable = false)
     private LocalDateTime dataEntregaPrevista;
 
-    // TODO: adicionar a data na qual que o livro foi devolvido.
+    @Column(nullable = false)
+    private LocalDateTime dataEntrega;
+
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
@@ -65,4 +67,9 @@ public class Emprestimo {
         return ativo;
     }
 
+    public void devolver() {
+        this.ativo = false;
+        this.dataEntrega = LocalDateTime.now();
+        this.exemplar.setDisponivel(true);
+    }
 }

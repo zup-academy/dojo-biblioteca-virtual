@@ -12,4 +12,6 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     Long countByAtivoIsTrueAndDataEntregaPrevistaIsBeforeAndUsuarioId(LocalDateTime data,
                                                                       Long usuarioId);
 
+    Boolean existsByIdAndUsuarioId(Long id,Long usuarioId);
+
 }
