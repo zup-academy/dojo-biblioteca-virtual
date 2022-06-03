@@ -55,18 +55,17 @@ public class ExemplarLivro {
             prazoEmDias = 60;
         }
 
-        LocalDate prazo = LocalDate.now().plusDays(prazoEmDias);
+        LocalDate dataDeEntrega = LocalDate.now().plusDays(prazoEmDias);
 
         // quantidade de emprestimo dos usuários padrão com exemplares reservados
         if (usuarioPadrao && quantidadeEmprestimoDoUsuario > 5) {
             throw new QuantidadeMaximaDeEmprestimoParaUsuarioPadraoException("Usuário já possui número máximo de empréstimos");
         }
 
-        Emprestimo emprestimo = new Emprestimo(this, usuario, prazo);
+        Emprestimo emprestimo = new Emprestimo(this, usuario, dataDeEntrega, prazoEmDias);
         this.reservado = true;
         this.emprestimos.add(emprestimo);
         usuario.adicionarEmprestimo(emprestimo);
-
 
         return emprestimo;
     }

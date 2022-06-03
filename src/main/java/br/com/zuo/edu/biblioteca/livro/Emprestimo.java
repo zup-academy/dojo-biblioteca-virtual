@@ -19,6 +19,9 @@ public class Emprestimo {
     private Usuario usuario;
 
     @Column(nullable = false)
+    private Integer prazosEmDias;
+
+    @Column(nullable = false)
     private LocalDate dataEntrega;
 
     @Column(nullable = false)
@@ -29,10 +32,11 @@ public class Emprestimo {
         this.usuario = usuario;
     }
 
-    public Emprestimo(ExemplarLivro exemplar, Usuario usuario, LocalDate dataEntrega) {
+    public Emprestimo(ExemplarLivro exemplar, Usuario usuario, LocalDate dataEntrega, Integer prazosEmDias) {
         this.exemplar = exemplar;
         this.usuario = usuario;
         this.dataEntrega = dataEntrega;
+        this.prazosEmDias = prazosEmDias;
     }
 
     @Deprecated
