@@ -62,8 +62,8 @@ public class Emprestimo {
         return ativo;
     }
 
-    public boolean isExpirado() {
-        return isAtivo() && criadoEm.toLocalDate().plusDays(prazoEmDias).isBefore(LocalDate.now());
+    public boolean passouDataDeEntrega() {
+        return criadoEm.toLocalDate().plusDays(prazoEmDias).isBefore(LocalDate.now());
     }
 
 }

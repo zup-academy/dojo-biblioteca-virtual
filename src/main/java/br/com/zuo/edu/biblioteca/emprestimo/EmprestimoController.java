@@ -1,7 +1,9 @@
 package br.com.zuo.edu.biblioteca.emprestimo;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -60,18 +62,23 @@ public class EmprestimoController {
         String novoIsbn = isbn.replaceAll("[^0-9X]", "");
 
         if (tipoUsuario.equals(TipoUsuario.PADRAO)) {
-            if (emprestimoRepository.countByAtivoIsTrueAndUsuarioId(usuarioId) >= 5) {
+            List<Emprestimo> emprestimosAtivos = emprestimoRepository.findAllByAtivoIsTrueAndUsuarioId(usuarioId);
+            List<Emprestimo> emprestimosExpirados = emprestimosAtivos.stream()
+                    .filter(Emprestimo::passouDataDeEntrega).collect(Collectors.toList());
+
+            if (emprestimosExpirados.size() > 0) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Usuário possui um ou mais empréstimos expirados."
+                );
+            }
+
+            if (emprestimosAtivos.size() >= 5) {
                 throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Usuário ultrapassou o limite de empréstimos."
                 );
             }
 
-            // TODO: checar se o usuário tem algum empréstimo expirado
-            // if (emprestimoRepository.countByIsExpiradoIsTrueAndUsuario_Id(usuarioId) > 0) {
-            //     throw new ResponseStatusException(
-            //         HttpStatus.BAD_REQUEST, "Usuário possui um ou mais empréstimos expirados."
-            //     );
-            // }
+
 
             if (prazoEmDias == null) {
                 throw new ResponseStatusException(
