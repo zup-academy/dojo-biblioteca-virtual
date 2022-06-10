@@ -24,6 +24,9 @@ public class Emprestimo {
     @Column(nullable = false)
     private LocalDate dataEntrega;
 
+    @Column
+    private LocalDate dataDevolucao;
+
     @Column(nullable = false)
     private boolean ativo = true;
 
@@ -45,5 +48,23 @@ public class Emprestimo {
 
     public Long getId() {
         return id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public ExemplarLivro getExemplar() {
+        return exemplar;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void devolver() {
+        this.ativo = false;
+        this.dataDevolucao = LocalDate.now();
+        this.exemplar.devolver();
     }
 }

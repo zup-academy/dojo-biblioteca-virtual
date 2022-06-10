@@ -69,4 +69,8 @@ public class ExemplarLivro {
 
         return emprestimo;
     }
+
+    public void devolver() {
+        this.reservado = false;
+    }
 }
