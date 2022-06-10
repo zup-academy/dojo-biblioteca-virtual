@@ -39,9 +39,7 @@ public class Emprestimo {
     @Column(nullable = false)
     private LocalDateTime dataEntregaPrevista;
 
-    @Column(nullable = false)
     private LocalDateTime dataEntrega;
-
 
     /**
      * @deprecated Construtor de uso exclusivo do Hibernate
@@ -72,4 +70,9 @@ public class Emprestimo {
         this.dataEntrega = LocalDateTime.now();
         this.exemplar.setDisponivel(true);
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
 }
